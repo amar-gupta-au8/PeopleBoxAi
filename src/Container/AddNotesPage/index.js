@@ -12,8 +12,11 @@ const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
       margin: theme.spacing(1),
-      // width: '25ch',
+      //width: '25ch',
     },
+  },
+  inputs: {
+    width: '40vw',
   },
   root2: {
     flexGrow: 1,
@@ -25,7 +28,6 @@ const BasicTextFields = ({ history }) => {
   const [notes, setNotes] = useState('');
   const classes = useStyles();
   const [context, setContext] = useContext(someContext);
-  // const { title, note } = context;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -68,6 +70,7 @@ const BasicTextFields = ({ history }) => {
               onChange={(e) => setLTitle(e.target.value)}
               label='Title'
               variant='outlined'
+              className={classes.inputs}
             />
           </Grid>
           <Grid item lg={12}>
@@ -79,6 +82,7 @@ const BasicTextFields = ({ history }) => {
               multiline
               rows={6}
               variant='outlined'
+              className={classes.inputs}
             />
           </Grid>
           <Grid item lg={12}>

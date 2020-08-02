@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
 import {
   AppBar,
   CssBaseline,
@@ -18,6 +17,7 @@ import {
 
 import NoteAddIcon from '@material-ui/icons/NoteAdd';
 import NotesSharpIcon from '@material-ui/icons/NotesSharp';
+import FindInPageSharpIcon from '@material-ui/icons/FindInPageSharp';
 import { someContext } from '../../Context';
 import { withRouter } from 'react-router-dom';
 
@@ -38,6 +38,20 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: drawerWidth,
   },
+  textField: {
+    height: '2rem',
+    width: '12rem',
+    margin: '1rem',
+  },
+  mainTextField: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconField: {
+    margin: '1rem',
+    cursor: 'pointer',
+  },
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
   content: {
@@ -52,7 +66,13 @@ const PermanentDrawerLeft = ({ history }) => {
   // eslint-disable-next-line
   const [context, setContext] = useContext(someContext);
   const [showData, setShowData] = useState('');
-  console.log(context);
+  const [Searchfield, setSearchfield] = useState('');
+  const searchedValue = () => {
+    const mainMatch = context.filter((data2) => {
+      return data2.title.includes(`${Searchfield}`);
+    });
+    return mainMatch;
+  };
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -71,22 +91,31 @@ const PermanentDrawerLeft = ({ history }) => {
         }}
         anchor='left'
       >
-        <div>
+        <div className={classes.mainTextField}>
           <TextField
             id='standard-start-adornment'
-            className={clsx(classes.margin, classes.textField)}
+            className={classes.textField}
+            value={Searchfield}
+            onChange={(e) => {
+              return setSearchfield(e.target.value);
+            }}
             InputProps={{
               startAdornment: (
-                <InputAdornment position='start'>s</InputAdornment>
+                <InputAdornment position='start'>
+                  <FindInPageSharpIcon />
+                </InputAdornment>
               ),
             }}
           />
-          <NoteAddIcon onClick={() => history.push('/create')} />
+          <NoteAddIcon
+            className={classes.iconField}
+            onClick={() => history.push('/create')}
+          />
         </div>
 
         <Divider />
         <List>
-          {context.map((data, index) => (
+          {searchedValue().map((data, index) => (
             <ListItem
               button
               onClick={() =>
@@ -105,6 +134,7 @@ const PermanentDrawerLeft = ({ history }) => {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <h1>{showData.title}</h1>
+        <Divider />
         <p>{showData.notes}</p>
       </main>
     </div>
