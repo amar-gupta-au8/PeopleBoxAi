@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { TextField, Button } from '@material-ui/core';
+import { TextField, Grid, Button } from '@material-ui/core';
+import { someContext } from '../../Context';
+import { withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import './index.scss';
+import { v4 as uuid } from 'uuid';
+import Header from '../../Components/Header';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -11,56 +15,80 @@ const useStyles = makeStyles((theme) => ({
       // width: '25ch',
     },
   },
+  root2: {
+    flexGrow: 1,
+  },
 }));
 
-export default function BasicTextFields() {
-  const [title, setTitle] = useState('');
+const BasicTextFields = ({ history }) => {
+  const [Ltitle, setLTitle] = useState('');
   const [notes, setNotes] = useState('');
   const classes = useStyles();
+  const [context, setContext] = useContext(someContext);
+  // const { title, note } = context;
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    return !title || !notes
+    return !Ltitle || !notes
       ? Swal.fire({
           icon: 'error',
           title: 'Oops...',
           text: 'Please Provide Title And Notes Both!',
         })
-      : Swal.fire({
+      : (Swal.fire({
           position: 'center',
           icon: 'success',
           title: 'Your Notes have been saved',
           showConfirmButton: false,
           timer: 1500,
-        });
+        }),
+        setContext([...context, { title: Ltitle, id: uuid(), note: notes }]),
+        history.push('/'));
   };
   return (
-    <form
-      onSubmit={handleSubmit}
-      className={classes.root}
-      noValidate
-      autoComplete='off'
-    >
-      <div className='mainForm'>
-        <TextField
-          id='outlined-basic'
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          label='Title'
-          variant='outlined'
-        />
-        <TextField
-          id='outlined-multiline-static'
-          label='Note'
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          multiline
-          rows={6}
-          variant='outlined'
-        />
-        <Button type='submit' variant='outlined'>
-          Create Note
-        </Button>
-      </div>
-    </form>
+    <div className={classes.root2}>
+      <Header />
+      <form
+        onSubmit={handleSubmit}
+        className={classes.root}
+        noValidate
+        autoComplete='off'
+      >
+        <Grid
+          container
+          spacing={3}
+          direction='column'
+          justify='center'
+          alignItems='center'
+        >
+          <Grid item lg={12}>
+            <TextField
+              id='outlined-basic'
+              value={Ltitle}
+              onChange={(e) => setLTitle(e.target.value)}
+              label='Title'
+              variant='outlined'
+            />
+          </Grid>
+          <Grid item lg={12}>
+            <TextField
+              id='outlined-multiline-static'
+              label='Note'
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              multiline
+              rows={6}
+              variant='outlined'
+            />
+          </Grid>
+          <Grid item lg={12}>
+            <Button type='submit' variant='outlined'>
+              Create Note
+            </Button>
+          </Grid>
+        </Grid>
+      </form>
+    </div>
   );
-}
+};
+export default withRouter(BasicTextFields);
