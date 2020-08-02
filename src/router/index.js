@@ -1,9 +1,9 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-const Home = React.lazy(() => import('../container/Home'));
+const Home = React.lazy(() => import('../Container/Home'));
 const Sidebar = React.lazy(() => import('../Components/Sidebar'));
-const AddNote = React.lazy(() => import('../container/AddNotesPage'));
-const NotFound = React.lazy(() => import('../container/NotFoundPage'));
+const AddNote = React.lazy(() => import('../Container/AddNotesPage'));
+const NotFound = React.lazy(() => import('../Container/NotFoundPage'));
 
 const AppRouter = () => {
   return (
