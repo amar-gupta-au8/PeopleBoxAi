@@ -44,7 +44,17 @@ const BasicTextFields = ({ history }) => {
           showConfirmButton: false,
           timer: 1500,
         }),
-        setContext([...context, { title: Ltitle, id: uuid(), note: notes }]),
+        setContext([
+          ...context,
+          { title: Ltitle, id: uuid(), date: new Date(), note: notes },
+        ]),
+        localStorage.setItem(
+          'data',
+          JSON.stringify([
+            ...context,
+            { title: Ltitle, id: uuid(), date: new Date(), note: notes },
+          ])
+        ),
         history.push('/'));
   };
   return (

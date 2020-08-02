@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
     width: '12rem',
     margin: '1rem',
   },
+
   mainTextField: {
     display: 'flex',
     alignItems: 'center',
@@ -51,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
   iconField: {
     margin: '1rem',
     cursor: 'pointer',
+    fontSize: '2rem',
   },
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
@@ -68,7 +70,8 @@ const PermanentDrawerLeft = ({ history }) => {
   const [showData, setShowData] = useState('');
   const [Searchfield, setSearchfield] = useState('');
   const searchedValue = () => {
-    const mainMatch = context.filter((data2) => {
+    const newData = JSON.parse(localStorage.getItem('data')) || [];
+    const mainMatch = newData.filter((data2) => {
       return data2.title.includes(`${Searchfield}`);
     });
     return mainMatch;
@@ -102,7 +105,7 @@ const PermanentDrawerLeft = ({ history }) => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position='start'>
-                  <FindInPageSharpIcon />
+                  <FindInPageSharpIcon style={{ fontSize: '2rem' }} />
                 </InputAdornment>
               ),
             }}
@@ -126,7 +129,9 @@ const PermanentDrawerLeft = ({ history }) => {
               <ListItemIcon>
                 <NotesSharpIcon />
               </ListItemIcon>
+
               <ListItemText primary={data.title} />
+              {console.log()}
             </ListItem>
           ))}
         </List>
@@ -135,9 +140,13 @@ const PermanentDrawerLeft = ({ history }) => {
         <div className={classes.toolbar} />
         <h1>{showData.title}</h1>
         <Divider />
-        <p>{showData.notes}</p>
+        <div style={{ width: '50vw' }}>
+          <p>{showData.notes}</p>
+        </div>
       </main>
     </div>
   );
 };
 export default withRouter(PermanentDrawerLeft);
+// 2020-08-02T20:42:18.951Z
+//
